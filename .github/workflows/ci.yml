@@ -12,6 +12,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: student-api
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,6 +26,7 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
+          cache-dependency-path: student-api/*.gradle*
 
       - name: Check and Compile
         run: |
@@ -41,5 +46,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spring-boot-api
-          path: build/libs/*.jar
+          path: student-api/build/libs/*.jar
           if-no-files-found: error
