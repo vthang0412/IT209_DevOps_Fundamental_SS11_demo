@@ -17,6 +17,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: student_db
+          MYSQL_USER: student_user
+          MYSQL_PASSWORD: student_pass
         ports:
           - 3306:3306
         options: >-
@@ -24,6 +26,11 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
+
+    env:
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/student_db
+      SPRING_DATASOURCE_USERNAME: student_user
+      SPRING_DATASOURCE_PASSWORD: student_pass
 
     defaults:
       run:
