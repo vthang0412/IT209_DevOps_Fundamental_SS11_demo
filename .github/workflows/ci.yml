@@ -1,0 +1,45 @@
+
+name: Spring Boot REST API CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Check and Compile
+        run: |
+          chmod +x gradlew
+          ./gradlew compileJava compileTestJava
+
+      - name: Build
+        run: ./gradlew assemble
+
+      - name: Test
+        run: ./gradlew test
+
+      - name: Package JAR
+        run: ./gradlew bootJar
+
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-boot-api
+          path: build/libs/*.jar
+          if-no-files-found: error
